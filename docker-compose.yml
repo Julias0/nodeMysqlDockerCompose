@@ -1,19 +1,21 @@
-version: '3.1'
+version: '3.1' # version number of compose file
 
-services:
-    app:
-        build: ./tuitionCenterNode
-        command: npm start
-        volumes: 
+services: # the services to be deployed
+    app: # the main service
+        build: ./tuitionCenterNode # location of the dockerfile relative to this file
+        command: npm start # command to execute when container starts
+        volumes: # bind mounting the application files so that the code updates are normal
             - ./tuitionCenterNode:/app
-            - /app/node_modules
+            - /app/node_modules # not to override the node_modules
         depends_on:
-            - db
+            - db # to start building this after db is built
         ports:
-            - "3000:3000"
+            - "3000:3000" # which port of this network to map to the host
     db:
-        image: mysql:5.7.28
-        environment: 
+        image: mysql:5.7.28 # the image corresponding to this service
+        volumes:
+            - tuitionCenterData:/var/lib/mysql # making the database persist data
+        environment: # declaring the required variables to init the mysql database
             MYSQL_USER: dhar
             MYSQL_PASSWORD: dhar
             MYSQL_ROOT_PASSWORD: KalaChashma
